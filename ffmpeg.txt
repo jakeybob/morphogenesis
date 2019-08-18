@@ -1,0 +1,60 @@
+https://trac.ffmpeg.org/wiki/Create%20a%20mosaic%20out%20of%20several%20input%20videos
+
+#### 2x2 grid of videos ####
+
+# readable version
+ffmpeg
+	-i output_a2b3.mp4 -i output_a3b3.mp4 -i output_a2b4.mp4 -i output_a3b4.mp4
+	-filter_complex "
+		nullsrc=size=720x720 [base];
+		[0:v] setpts=PTS-STARTPTS, scale=360x360 [upperleft];
+		[1:v] setpts=PTS-STARTPTS, scale=360x360 [upperright];
+		[2:v] setpts=PTS-STARTPTS, scale=360x360 [lowerleft];
+		[3:v] setpts=PTS-STARTPTS, scale=360x360 [lowerright];
+		[base][upperleft] overlay=shortest=1 [tmp1];
+		[tmp1][upperright] overlay=shortest=1:x=360 [tmp2];
+		[tmp2][lowerleft] overlay=shortest=1:y=360 [tmp3];
+		[tmp3][lowerright] overlay=shortest=1:x=360:y=360
+	"
+	-c:v libx264 output.mp4
+
+# one line version
+  ffmpeg -i output_a2b3.mp4 -i output_a3b3.mp4 -i output_a2b4.mp4 -i output_a3b4.mp4 -filter_complex "nullsrc=size=720x720 [base]; [0:v] setpts=PTS-STARTPTS, scale=360x360 [upperleft]; [1:v] setpts=PTS-STARTPTS, scale=360x360 [upperright]; [2:v] setpts=PTS-STARTPTS, scale=360x360 [lowerleft]; [3:v] setpts=PTS-STARTPTS, scale=360x360 [lowerright]; [base][upperleft] overlay=shortest=1 [tmp1]; [tmp1][upperright] overlay=shortest=1:x=360 [tmp2]; [tmp2][lowerleft] overlay=shortest=1:y=360 [tmp3]; [tmp3][lowerright] overlay=shortest=1:x=360:y=360" -c:v libx264 output.mp4
+
+
+3x3 grid of videos
+
+# readable version
+	ffmpeg
+		-i output_a2b3.mp4 -i output_a3b3.mp4 -i output_a4b3.mp4
+		-i output_a2b4.mp4 -i output_a3b4.mp4 -i output_a4b4.mp4
+		-i output_a2b5.mp4 -i output_a3b5.mp4 -i output_a4b5.mp4
+		-filter_complex "
+			nullsrc=size=1080x1080 [base];
+			[0:v] setpts=PTS-STARTPTS, scale=360x360 [upperleft];
+			[1:v] setpts=PTS-STARTPTS, scale=360x360 [uppermiddle];
+			[2:v] setpts=PTS-STARTPTS, scale=360x360 [upperright];
+			[3:v] setpts=PTS-STARTPTS, scale=360x360 [middleleft];
+			[4:v] setpts=PTS-STARTPTS, scale=360x360 [middlemiddle];
+			[5:v] setpts=PTS-STARTPTS, scale=360x360 [middleright];
+			[6:v] setpts=PTS-STARTPTS, scale=360x360 [lowerleft];
+			[7:v] setpts=PTS-STARTPTS, scale=360x360 [lowermiddle];
+			[8:v] setpts=PTS-STARTPTS, scale=360x360 [lowerright];
+			[base][upperleft] overlay=shortest=1 [tmp1];
+			[tmp1][uppermiddle] overlay=shortest=1:x=360 [tmp2];
+			[tmp2][upperright] overlay=shortest=1:x=720 [tmp3];
+			[tmp3][middleleft] overlay=shortest=1:y=360 [tmp4];
+			[tmp4][middlemiddle] overlay=shortest=1:x=360:y=360 [tmp5];
+			[tmp5][middleright] overlay=shortest=1:x=720:y=360 [tmp6];
+			[tmp6][lowerleft] overlay=shortest=1:y=720 [tmp7];
+			[tmp7][lowermiddle] overlay=shortest=1:x=360:y=720 [tmp8];
+			[tmp8][lowerright] overlay=shortest=1:x=720:y=720
+		"
+		-c:v libx264 output.mp4
+
+# one line version
+ffmpeg -i output_a2b3.mp4 -i output_a3b3.mp4 -i output_a4b3.mp4 -i output_a2b4.mp4 -i output_a3b4.mp4 -i output_a4b4.mp4 -i output_a2b5.mp4 -i output_a3b5.mp4 -i output_a4b5.mp4 -filter_complex "nullsrc=size=1080x1080 [base]; [0:v] setpts=PTS-STARTPTS, scale=360x360 [upperleft]; [1:v] setpts=PTS-STARTPTS, scale=360x360 [uppermiddle]; [2:v] setpts=PTS-STARTPTS, scale=360x360 [upperright]; [3:v] setpts=PTS-STARTPTS, scale=360x360 [middleleft]; [4:v] setpts=PTS-STARTPTS, scale=360x360 [middlemiddle]; [5:v] setpts=PTS-STARTPTS, scale=360x360 [middleright]; [6:v] setpts=PTS-STARTPTS, scale=360x360 [lowerleft]; [7:v] setpts=PTS-STARTPTS, scale=360x360 [lowermiddle]; [8:v] setpts=PTS-STARTPTS, scale=360x360 [lowerright]; [base][upperleft] overlay=shortest=1 [tmp1]; [tmp1][uppermiddle] overlay=shortest=1:x=360 [tmp2]; [tmp2][upperright] overlay=shortest=1:x=720 [tmp3]; [tmp3][middleleft] overlay=shortest=1:y=360 [tmp4]; [tmp4][middlemiddle] overlay=shortest=1:x=360:y=360 [tmp5]; [tmp5][middleright] overlay=shortest=1:x=720:y=360 [tmp6]; [tmp6][lowerleft] overlay=shortest=1:y=720 [tmp7]; [tmp7][lowermiddle] overlay=shortest=1:x=360:y=720 [tmp8]; [tmp8][lowerright] overlay=shortest=1:x=720:y=720" -c:v libx264 output.mp4
+
+# crop central square from 1920x1080 videos
+
+ffmpeg -i in.mp4 -filter:v "crop=1080:1080:420:0" -c:a copy out.mp4
