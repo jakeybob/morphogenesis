@@ -1,4 +1,4 @@
-# turing-morpho
+# morphogenesis
 
 - **morph.R**: *R* script for generating video frames for morphogenesis simulations
 - **ffmpeg.txt**: *ffmpeg* commands for tiling and compiling videos
