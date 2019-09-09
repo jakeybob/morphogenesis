@@ -1,5 +1,7 @@
 # morphogenesis
 
+*R* code for simulating 2D morphogenesis from random noise.
+
 - **morph.R**: *R* script for generating video frames for morphogenesis simulations
 - **ffmpeg.txt**: *ffmpeg* commands for tiling and compiling videos
 - based on [this](https://ipython-books.github.io/124-simulating-a-partial-differential-equation-reaction-diffusion-systems-and-turing-patterns/) Python code/model
