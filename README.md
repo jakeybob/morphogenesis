@@ -24,12 +24,12 @@ We can simulate this by solving the [Fitzhugh-Nagumo](https://en.wikipedia.org/w
 ## Simulation
 In order to model this system in such a way that we can see appreciable patterns forming, we can create a finite discrete (*x*, *y*) grid, and solve the equations over this space numerically. For differentiation with respect to time at every point in the grid, we can use the one dimensional finite difference with a suitably small value of *dt*.
 
-<!-- time-diff: \frac{\partial u}{dt}(t; x,y) \approx \frac{u(t+dt; x,y) - u(t;x,y)}{dt} -->
+<!-- time-diff: \frac{\partial u}{\partial t}(t; x,y) \approx \frac{u(t+dt; x,y) - u(t;x,y)}{dt} -->
 <p align="center"><img alt="Time Differentiation", src="pics/readme/time-diff.svg"></p>
 
 Solving the spatial part of the problem requires approximating the Laplacian operator to the 2D discrete case, which we can do using the [five point stencil method](https://en.wikipedia.org/wiki/Five-point_stencil#Two_dimensions) where *h* is e.g. the length unit of the grid (~ a pixel).
 
-<!--quincunx Laplace: \nabla^2(x,y) \approx \frac{u(x+h,y) + u(x-h,y) + u(x,y+h) + u(x,y-h) - 4u(x,y)}{dx^2}
+<!--quincunx Laplace: \nabla^2 u(x,y) \approx \frac{u(x+h,y) + u(x-h,y) + u(x,y+h) + u(x,y-h) - 4u(x,y)}{dx^2}
 ![Laplacian](pics/readme/QLaplace.svg)-->
 <p align="center"><img alt="Laplacian", src="pics/readme/QLaplace.svg"></p>
 
